@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="icon" href="favicon.jpeg" type="image/x-icon">
+    <title>Business Card by Hasan </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .card-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .business-card {
+            width: 600px;
+            height: 300px;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 7px;
+            width: 100%;
+            height: 100%;
+            color: black;
+            text-align: right;
+        }
+
+        .text {
+            position: absolute;
+            color: #3b3b37;
+            left: 243px;
+            font-size: 18px;
+            width: 50%;
+            word-wrap: break-word;
+        }
+
+        .name {
+            top: 50px;
+            right: 20px;
+            left: 263px;
+            font-size: 28px;
+            font-weight: bold;
+            color: purple;
+        }
+
+        .title {
+            top: 90px;
+            left: 263px;
+            right: 20px;
+            font-size: 18px;
+        }
+
+        .email, .phone, .location, .website {
+            right: 20px;
+            font-size: 18px;
+        }
+
+        .email {
+            top: 130px;
+        }
+
+        .phone {
+            top: 160px;
+        }
+
+        .location {
+            top: 190px;
+        }
+
+        .website {
+            top: 220px;
+        } 
+
+        .logo {
+            position: absolute;
+            top: 45px;
+            left: 50px;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none; /* Hide by default */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input {
+            width: 300px;
+            padding: 5px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card-container" id="cardContainer">
+        <img src="https://i.ibb.co/gJjsnx8/Blue-and-Gold-Modern-Business-Consultant-Business-Card.png" alt="Business Card" class="business-card">
+        <img src="https://via.placeholder.com/100" alt="Logo" class="logo" id="logo">
+        <div class="overlay">
+            <div class="text name">Aaron Loeb</div>
+            <div class="text title">Business Consultant</div>
+            <div class="text email">hello@reallygreatsite.com</div>
+            <div class="text phone">+123-456-7890</div>
+            <div class="text location">123 Anywhere St., Any City</div>
+            <div class="text website">www.reallygreatsite.com</div>
+        </div>
+    </div>
+
+    <form id="businessCardForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required><br>
+
+        <label for="title">Job Title:</label>
+        <input type="text" id="title" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required><br>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" required><br>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" required><br>
+
+        <label for="website">Website:</label>
+        <input type="url" id="website" required><br>
+
+        <label for="logoUrl">Logo URL:</label>
+        <input type="url" id="logoUrl"><br>
+
+        <button type="submit">Update Card</button>
+    </form>
+
+    <button id="exportPng">Export as PNG</button>
+    <button id="exportJpg">Export as JPG</button>
+    <button id="exportPdf">Export as PDF</button>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        document.getElementById('businessCardForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            document.querySelector('.name').innerText = document.getElementById('name').value;
+            document.querySelector('.title').innerText = document.getElementById('title').value;
+            document.querySelector('.email').innerText = document.getElementById('email').value;
+            document.querySelector('.phone').innerText = document.getElementById('phone').value;
+            document.querySelector('.location').innerText = document.getElementById('location').value;
+            document.querySelector('.website').innerText = document.getElementById('website').value;
+
+            const logoUrl = document.getElementById('logoUrl').value;
+            const logoElement = document.getElementById('logo');
+            if (logoUrl) {
+                logoElement.src = logoUrl;
+                logoElement.style.display = 'block';
+            } else {
+                logoElement.style.display = 'none';
+            }
+        });
+
+        function exportCard(format) {
+            html2canvas(document.getElementById('cardContainer'), {
+                useCORS: true, // Allow cross-origin images
+            }).then(function(canvas) {
+                if (format === 'png' || format === 'jpg') {
+                    const link = document.createElement('a');
+                    link.download = `business-card_by-Hasasn.${format}`;
+                    link.href = canvas.toDataURL(`image/${format}`);
+                    link.click();
+                } else if (format === 'pdf') {
+                    const imgData = canvas.toDataURL('image/jpeg');
+                    const pdf = new jspdf.jsPDF();
+                    pdf.addImage(imgData, 'JPEG', 15, 40, 180, 90);
+                    pdf.save('business-card_by-Hasasn.pdf');
+                }
+            });
+        }
+
+        document.getElementById('exportPng').addEventListener('click', function() {
+            exportCard('png');
+        });
+
+        document.getElementById('exportJpg').addEventListener('click', function() {
+            exportCard('jpg');
+        });
+
+        document.getElementById('exportPdf').addEventListener('click', function() {
+            exportCard('pdf');
+        });
+    </script>
+
+</body>
+
+</html>
